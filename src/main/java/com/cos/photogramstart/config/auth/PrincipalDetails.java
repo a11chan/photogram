@@ -2,9 +2,11 @@ package com.cos.photogramstart.config.auth;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import com.cos.photogramstart.domain.user.User;
 
@@ -12,14 +14,19 @@ import lombok.Data;
 
 
 @Data
-public class PrincipalDetails implements UserDetails {
+public class PrincipalDetails implements UserDetails, OAuth2User {
 
   private static final long serialVersionUID = 1L;
 
   private User user;
+  private Map<String, Object> attributes;
   
   // 생성자 정의
   public PrincipalDetails(User user) {
+    this.user = user;
+  }
+  
+  public PrincipalDetails(User user, Map<String, Object> attributes) {
     this.user = user;
   }
   
@@ -58,6 +65,17 @@ public class PrincipalDetails implements UserDetails {
   @Override
   public boolean isEnabled() { // 이 계정이 활성화되었습니까?
     return true; // 네
+  }
+
+  @Override
+  public Map<String, Object> getAttributes() {
+    return attributes; // SNS 로그인 시 받아온 계정 정보들
+  }
+
+  @Override
+  public String getName() {
+    // TODO Auto-generated method stub
+    return (String) attributes.get("name");
   }
 
 }

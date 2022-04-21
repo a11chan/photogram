@@ -33,7 +33,7 @@ public class User {
 	// 번호 증가 방법을 해당 DB 방식으로 채택(MySQL, MariaDB, Oracle, ...)
 	private int id;
 	
-	@Column(unique = true)
+	@Column(length = 100, unique = true) // OAuth2 로그인 시 긴 아이디 수용을 위한 길이 확장
 	private String username;
 	@Column(nullable = false)
 	private String password;
